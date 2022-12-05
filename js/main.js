@@ -88,6 +88,8 @@ $addInputAge.placeholder = "введите возраст";
 $addInputYearBirth.placeholder = "введите год рождения";
 $addInputHobby.placeholder = "введите ваше хобби";
 
+$addInputAge.type = "number";
+
 $addForm.append(
   $addInputName,
   $addInputSureName,
