@@ -8,30 +8,27 @@ let listData = [
     hobby: "IT",
   },
   {
-    name: "Максим",
-    sureName: "Борисович",
-    lastName: "Медведев",
+    name: "Артем",
+    sureName: "Сергеевич",
+    lastName: "Виноградов",
     age: 11,
     hobby: "Телефон",
   },
   {
     name: "Кирилл",
-    sureName: "Борисович",
-    lastName: "Медведев",
+    sureName: "Васильевич",
+    lastName: "Савинов",
     age: 17,
     hobby: "Спорт",
   },
   {
-    name: "шрина",
-    sureName: "Борисовна",
-    lastName: "Медведева",
+    name: "Ирина",
+    sureName: "Семеновна",
+    lastName: "Иванова",
     age: 9,
     hobby: "Танцы",
   },
 ];
-
-let sortColumnFlag = "age";
-let sortDirFlag = true;
 
 let newListData = [...listData];
 
@@ -128,6 +125,8 @@ function createUserTr(oneUser) {
 }
 
 // Рендер - Ререндер ======================================================
+let sortColumnFlag = "fio";
+let sortDirFlag = true;
 
 function rerender(arrData) {
   $tableBody.innerHTML = "";
@@ -141,16 +140,11 @@ function rerender(arrData) {
   }
 
   //Сортировка
+
   newListData = newListData.sort(function (a, b) {
     let sort = a[sortColumnFlag] < b[sortColumnFlag];
-
-    if (sortDirFlag === false) {
-      a[sortColumnFlag] > b[sortColumnFlag];
-    }
-
-    if (sort) {
-      return -1;
-    }
+    if (sortDirFlag === false) sort = a[sortColumnFlag] > b[sortColumnFlag];
+    if (sort) return -1;
   });
 
   // Отрисовка
@@ -194,13 +188,15 @@ $addForm.addEventListener("submit", (el) => {
   rerender(newListData);
 });
 
-$sortFioBtn.addEventListener("click", () => {
-  sortColumnFlag = "fio";
+$sortFioBtn.addEventListener("click", function () {
   sortDirFlag = !sortDirFlag;
+  sortColumnFlag = "fio";
+
   rerender(newListData);
 });
-$sortAgeBtn.addEventListener("click", () => {
-  sortColumnFlag = "age";
+$sortAgeBtn.addEventListener("click", function () {
   sortDirFlag = !sortDirFlag;
+  sortColumnFlag = "age";
+
   rerender(newListData);
 });
