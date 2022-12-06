@@ -45,3 +45,8 @@ a {
 
   -webkit-user-select: none;
 }
+
+.hobby-th {
+  text-transform: uppercase;
+  text-align: center;
+}
