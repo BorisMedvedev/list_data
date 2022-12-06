@@ -191,12 +191,10 @@ $addForm.addEventListener("submit", (el) => {
 $sortFioBtn.addEventListener("click", function () {
   sortDirFlag = !sortDirFlag;
   sortColumnFlag = "fio";
-
   rerender(newListData);
 });
 $sortAgeBtn.addEventListener("click", function () {
   sortDirFlag = !sortDirFlag;
   sortColumnFlag = "age";
-
   rerender(newListData);
 });
