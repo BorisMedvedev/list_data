@@ -1,5 +1,5 @@
 //база данных
-const listData = [
+let listData = [
   {
     name: "Борис",
     sureName: "Николаевич",
@@ -29,6 +29,8 @@ const listData = [
     hobby: "Танцы",
   },
 ];
+
+let newListData = [...listData];
 
 // создание элементов ==================================
 const $app = document.getElementById("app");
@@ -66,7 +68,7 @@ const $addInputName = document.createElement("input");
 const $addInputSureName = document.createElement("input");
 const $addInputLastName = document.createElement("input");
 const $addInputAge = document.createElement("input");
-const $addInputYearBirth = document.createElement("input");
+// const $addInputYearBirth = document.createElement("input");
 const $addInputHobby = document.createElement("input");
 const $addBtn = document.createElement("button");
 
@@ -78,14 +80,14 @@ $addInputName.classList.add("form-control", "mb-3");
 $addInputSureName.classList.add("form-control", "mb-3");
 $addInputLastName.classList.add("form-control", "mb-3");
 $addInputAge.classList.add("form-control", "mb-3");
-$addInputYearBirth.classList.add("form-control", "mb-3");
+// $addInputYearBirth.classList.add("form-control", "mb-3");
 $addInputHobby.classList.add("form-control", "mb-3");
 
-$addInputName.placeholder = "введите имя";
-$addInputSureName.placeholder = "введите фамилию";
-$addInputLastName.placeholder = "введите отчество";
-$addInputAge.placeholder = "введите возраст";
-$addInputYearBirth.placeholder = "введите год рождения";
+$addInputName.placeholder = "введите имя*";
+$addInputSureName.placeholder = "введите фамилию*";
+$addInputLastName.placeholder = "введите отчество*";
+$addInputAge.placeholder = "введите возраст*";
+// $addInputYearBirth.placeholder = "введите год рождения";
 $addInputHobby.placeholder = "введите ваше хобби";
 
 $addInputAge.type = "number";
@@ -95,39 +97,46 @@ $addForm.append(
   $addInputSureName,
   $addInputLastName,
   $addInputAge,
-  $addInputYearBirth,
+  // $addInputYearBirth,
   $addInputHobby,
   $addBtn
 );
 $app.prepend($addForm);
 
-let newListData = [...listData];
+function createUserTr(oneUser) {
+  const $userTr = document.createElement("tr");
+  const $userThFio = document.createElement("th");
+  const $userThAge = document.createElement("th");
+  const $userThYearBirth = document.createElement("th");
+  const $userThHobby = document.createElement("th");
+
+  $userThFio.textContent = oneUser.fio;
+  $userThAge.textContent = oneUser.age;
+  $userThYearBirth.textContent = oneUser.yearBirth;
+  $userThHobby.textContent = oneUser.hobby;
+
+  $userTr.append($userThFio, $userThAge, $userThYearBirth, $userThHobby);
+
+  return $userTr;
+}
 
 // Рендер - Ререндер ======================================================
+
 function rerender(arrData) {
   $tableBody.innerHTML = "";
+
   // Подготовка
   for (const oneUser of arrData) {
     oneUser.fio =
       oneUser.name + " " + oneUser.sureName + " " + oneUser.lastName;
     oneUser.yearBirth = new Date().getFullYear() - oneUser.age;
   }
+
   // Отрисовка
 
   for (const oneUser of arrData) {
-    const $userTr = document.createElement("tr");
-    const $userThFio = document.createElement("th");
-    const $userThAge = document.createElement("th");
-    const $userThYearBirth = document.createElement("th");
-    const $userThHobby = document.createElement("th");
-
-    $userThFio.textContent = oneUser.fio;
-    $userThAge.textContent = oneUser.age;
-    $userThYearBirth.textContent = oneUser.yearBirth;
-    $userThHobby.textContent = oneUser.hobby;
-
-    $userTr.append($userThFio, $userThAge, $userThYearBirth, $userThHobby);
-    $tableBody.append($userTr);
+    const $newUser = createUserTr(oneUser);
+    $tableBody.append($newUser);
   }
 }
 rerender(newListData);
@@ -135,12 +144,35 @@ rerender(newListData);
 //Добавление
 $addForm.addEventListener("submit", (el) => {
   el.preventDefault();
+
+  if ($addInputName.value.trim() === "") {
+    alert("Имя не введено!");
+
+    return;
+  }
+
+  if ($addInputSureName.value.trim() === "") {
+    alert("ФИO не введено!");
+
+    return;
+  }
+  if ($addInputLastName.value.trim() === "") {
+    alert("Отчeство не введено!");
+
+    return;
+  }
+  if ($addInputAge.value.trim() === "") {
+    alert("Возраст не введен!");
+
+    return;
+  }
+
   newListData.push({
-    name: $addInputName.value.trim(),
-    sureName: $addInputSureName.value.trim(),
-    lastName: $addInputLastName.value.trim(),
-    age: parseInt($addInputAge.value.trim()),
-    hobby: $addInputHobby.value.trim(),
+    name: $addInputName.value.trim().toUpperCase(),
+    sureName: $addInputSureName.value.trim().toUpperCase(),
+    lastName: $addInputLastName.value.trim().toUpperCase(),
+    age: parseInt($addInputAge.value.trim().toUpperCase()),
+    hobby: $addInputHobby.value.trim().toUpperCase(),
   });
   rerender(newListData);
 });
