@@ -145,19 +145,14 @@ function rerender(arrData) {
   }
 
   //Фильтрация
-  if ($filterFio.value.trim() !== "") {
-    listData = listData.filter(function (oneUser) {
-      if (oneUser.fio.includes($filterFio.value.trim())) {
-        return true;
-      }
-    });
-  }
-  if ($filterHobby.value.trim() !== "") {
-    listData = listData.filter(function (oneUser) {
-      if (oneUser.hobby.includes($filterHobby.value.trim())) {
-        return true;
-      }
-    });
+  function filter(arr, param, item) {
+    if (item.value.trim() !== "") {
+      arr = arr.filter(function (oneUser) {
+        if (param.includes(item.value.trim())) {
+          return true;
+        }
+      });
+    }
   }
 
   //Сортировка
@@ -207,17 +202,18 @@ $addForm.addEventListener("submit", (el) => {
     hobby: $addInputHobby.value.trim(),
   });
   rerender(listData);
+  $addForm.reset();
 });
 
 $sortFioBtn.addEventListener("click", function () {
   sortDirFlag = !sortDirFlag;
   sortColumnFlag = "fio";
-  rerender(newListData);
+  rerender(listData);
 });
 $sortAgeBtn.addEventListener("click", function () {
   sortDirFlag = !sortDirFlag;
   sortColumnFlag = "age";
-  rerender(newListData);
+  rerender(listData);
 });
 
 $searchForm.addEventListener("submit", function (el) {
@@ -225,6 +221,7 @@ $searchForm.addEventListener("submit", function (el) {
 });
 
 $filterFio.addEventListener("input", function () {
+  filter(listData, fio, $filterFio);
   rerender(listData);
 });
 
@@ -233,5 +230,6 @@ $filterHobby.addEventListener("input", function () {
 });
 
 $sortReset.addEventListener("click", function () {
+  $searchForm.reset();
   rerender(listData);
 });
