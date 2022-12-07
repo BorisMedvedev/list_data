@@ -40,6 +40,7 @@ const $sortAgeBtn = document.getElementById("sort-age");
 const $searchForm = document.getElementById("search-form");
 const $filterFio = document.getElementById("input-fio");
 const $filterHobby = document.getElementById("input-hobby");
+const $sortReset = document.getElementById("sort-reset");
 
 const $table = document.createElement("table");
 const $tabeHead = document.createElement("thead");
@@ -146,14 +147,14 @@ function rerender(arrData) {
   //Фильтрация
   if ($filterFio.value.trim() !== "") {
     listData = listData.filter(function (oneUser) {
-      if (oneUser.fio.includes($filterFio.value)) {
+      if (oneUser.fio.includes($filterFio.value.trim())) {
         return true;
       }
     });
   }
   if ($filterHobby.value.trim() !== "") {
     listData = listData.filter(function (oneUser) {
-      if (oneUser.hobby.includes($filterHobby.value)) {
+      if (oneUser.hobby.includes($filterHobby.value.trim())) {
         return true;
       }
     });
@@ -161,7 +162,7 @@ function rerender(arrData) {
 
   //Сортировка
 
-  newListData = newListData.sort(function (a, b) {
+  listData = listData.sort(function (a, b) {
     let sort = a[sortColumnFlag] < b[sortColumnFlag];
     if (sortDirFlag === false) sort = a[sortColumnFlag] > b[sortColumnFlag];
     if (sort) return -1;
@@ -228,5 +229,9 @@ $filterFio.addEventListener("input", function () {
 });
 
 $filterHobby.addEventListener("input", function () {
+  rerender(listData);
+});
+
+$sortReset.addEventListener("click", function () {
   rerender(listData);
 });
