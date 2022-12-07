@@ -5,7 +5,7 @@ let listData = [
     sureName: "Николаевич",
     lastName: "Медведев",
     age: 44,
-    hobby: "IT",
+    hobby: "Верстка",
   },
   {
     name: "Артем",
@@ -36,6 +36,10 @@ let newListData = [...listData];
 const $app = document.getElementById("app");
 const $sortFioBtn = document.getElementById("sort-fio");
 const $sortAgeBtn = document.getElementById("sort-age");
+
+const $searchForm = document.getElementById("search-form");
+const $filterFio = document.getElementById("input-fio");
+const $filterHobby = document.getElementById("input-hobby");
 
 const $table = document.createElement("table");
 const $tabeHead = document.createElement("thead");
@@ -139,6 +143,22 @@ function rerender(arrData) {
     oneUser.yearBirth = new Date().getFullYear() - oneUser.age;
   }
 
+  //Фильтрация
+  if ($filterFio.value.trim() !== "") {
+    listData = listData.filter(function (oneUser) {
+      if (oneUser.fio.includes($filterFio.value)) {
+        return true;
+      }
+    });
+  }
+  if ($filterHobby.value.trim() !== "") {
+    listData = listData.filter(function (oneUser) {
+      if (oneUser.hobby.includes($filterHobby.value)) {
+        return true;
+      }
+    });
+  }
+
   //Сортировка
 
   newListData = newListData.sort(function (a, b) {
@@ -154,7 +174,7 @@ function rerender(arrData) {
     $tableBody.append($newUser);
   }
 }
-rerender(newListData);
+rerender(listData);
 
 //Добавление
 $addForm.addEventListener("submit", (el) => {
@@ -178,14 +198,14 @@ $addForm.addEventListener("submit", (el) => {
     return;
   }
 
-  newListData.push({
+  listData.push({
     name: $addInputName.value.trim(),
     sureName: $addInputSureName.value.trim(),
     lastName: $addInputLastName.value.trim(),
     age: parseInt($addInputAge.value.trim()),
     hobby: $addInputHobby.value.trim(),
   });
-  rerender(newListData);
+  rerender(listData);
 });
 
 $sortFioBtn.addEventListener("click", function () {
@@ -197,4 +217,16 @@ $sortAgeBtn.addEventListener("click", function () {
   sortDirFlag = !sortDirFlag;
   sortColumnFlag = "age";
   rerender(newListData);
+});
+
+$searchForm.addEventListener("submit", function (el) {
+  el.preventDefault();
+});
+
+$filterFio.addEventListener("input", function () {
+  rerender(listData);
+});
+
+$filterHobby.addEventListener("input", function () {
+  rerender(listData);
 });
