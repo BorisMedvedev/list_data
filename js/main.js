@@ -129,6 +129,15 @@ function createUserTr(oneUser) {
   return $userTr;
 }
 
+//Фильтрация
+function filter(arr, prop, value) {
+  return arr.filter(function (oneUser) {
+    if (oneUser[prop].includes(value.trim())) {
+      return true;
+    }
+  });
+}
+
 // Рендер - Ререндер ======================================================
 let sortColumnFlag = "fio";
 let sortDirFlag = true;
@@ -144,24 +153,21 @@ function rerender(arrData) {
     oneUser.yearBirth = new Date().getFullYear() - oneUser.age;
   }
 
-  //Фильтрация
-  function filter(arr, param, item) {
-    if (item.value.trim() !== "") {
-      arr = arr.filter(function (oneUser) {
-        if (param.includes(item.value.trim())) {
-          return true;
-        }
-      });
-    }
-  }
-
   //Сортировка
 
-  listData = listData.sort(function (a, b) {
+  newListData = newListData.sort(function (a, b) {
     let sort = a[sortColumnFlag] < b[sortColumnFlag];
     if (sortDirFlag === false) sort = a[sortColumnFlag] > b[sortColumnFlag];
     if (sort) return -1;
   });
+
+  //Фильтрация
+  if ($filterFio.value.trim() !== "") {
+    newListData = filter(newListData, "fio", $filterFio.value);
+  }
+  if ($filterHobby.value.trim() !== "") {
+    newListData = filter(newListData, "fio", $filterHobby.value);
+  }
 
   // Отрисовка
 
@@ -170,7 +176,7 @@ function rerender(arrData) {
     $tableBody.append($newUser);
   }
 }
-rerender(listData);
+rerender(newListData);
 
 //Добавление
 $addForm.addEventListener("submit", (el) => {
@@ -208,12 +214,12 @@ $addForm.addEventListener("submit", (el) => {
 $sortFioBtn.addEventListener("click", function () {
   sortDirFlag = !sortDirFlag;
   sortColumnFlag = "fio";
-  rerender(listData);
+  rerender(newListData);
 });
 $sortAgeBtn.addEventListener("click", function () {
   sortDirFlag = !sortDirFlag;
   sortColumnFlag = "age";
-  rerender(listData);
+  rerender(newListData);
 });
 
 $searchForm.addEventListener("submit", function (el) {
@@ -221,15 +227,15 @@ $searchForm.addEventListener("submit", function (el) {
 });
 
 $filterFio.addEventListener("input", function () {
-  filter(listData, fio, $filterFio);
-  rerender(listData);
+  rerender(newListData);
 });
 
 $filterHobby.addEventListener("input", function () {
-  rerender(listData);
+  rerender(newListData);
 });
 
 $sortReset.addEventListener("click", function () {
   $searchForm.reset();
-  rerender(listData);
+
+  rerender(newListData);
 });
